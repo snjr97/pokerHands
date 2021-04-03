@@ -10,6 +10,11 @@ class Card {
 	private Suit cardSuit;
 	private int cardValue;
 	
+	public Card() {
+		cardSuit = null;
+		cardValue = 0;
+	}
+	
 	//MEMBER FUNCTIONS
 	public void setCardSuit(Suit s) { cardSuit = s; }
 	
@@ -55,6 +60,10 @@ class CardDeck {
 		topCard = 0;
 		cards = new Card[52];
 		
+		for (int i = 0; i < cards.length; i++) {
+			cards[i] = new Card();
+		}
+		
 		for (int i = 0; i < 52; i++) {
 			//Set value between 2 - 14
 			cards[i].setCardValue((i % 13) + 2);
@@ -67,25 +76,36 @@ class CardDeck {
 			}
 		}
 		
+		shuffleDeck();
+		
 	}
 	
 	public void shuffleDeck() {
 		
 		Random rand = new Random();
 		
-		//Shuffle 4 times
+		ArrayList<Card> temp = new ArrayList<Card>(0);
+		Collections.addAll(temp, cards);
+		
 		for (int i = 0; i < 4; i++) {
-			
-			for (int j = 0; j < 52; j++) {
-				int randomNum = rand.nextInt() % 52;
-				
-				Card temp = cards[j];
-				cards[j] = cards[randomNum];
-				cards[randomNum] = temp;
-				
-			}
-			
+			Collections.shuffle(temp);
 		}
+		
+//		//Shuffle 4 times
+//		for (int i = 0; i < 4; i++) {
+//			
+//			for (int j = 0; j < 52; j++) {
+//				int randomNum = rand.nextInt() % 52;
+//				
+//				Card temp = cards[j];
+//				cards[j] = cards[randomNum];
+//				cards[randomNum] = temp;
+//				
+//			}
+//			
+//		}
+		
+		cards = temp.toArray(new Card[0]);
 		
 		topCard = 0;
 		
