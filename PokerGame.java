@@ -4,17 +4,17 @@ import java.util.function.Predicate;
 
 class PokerGame {
 	
+	//MEMBER VARIABLES
 	public Player[] playerList;
 	final static int STRAIGHT_FLUSH = 9, FOUR_OF_A_KIND = 8, FULL_HOUSE = 7, 
 			FLUSH = 6, STRAIGHT = 5, THREE_OF_A_KIND = 4, TWO_PAIRS = 3,
 			PAIR = 2, HIGH_CARD = 1;
 	
-	public PokerGame(int numOfPlayers, boolean redirection) {
+	public PokerGame(int numOfPlayers) {
 		playerList = new Player[numOfPlayers];
 		for (int i = 0; i < numOfPlayers; i++) {
 			playerList[i] = new Player();
-			if (!redirection)
-				playerList[i].setPlayerName(i + 1);
+			playerList[i].setPlayerName(i + 1);
 		}
 	}
 	
@@ -30,7 +30,8 @@ class PokerGame {
 		
 		Player highestHolder = null;
 		
-		//Work way through players, find best hand
+		//Iterate way through players, find best hand
+		//Start by checking for Straight Flush and work down to High Card
 		for (Player currentPlayer : playerList) {
 			
 			currentPlayer.sortHand();
@@ -157,6 +158,7 @@ class PokerGame {
 		int matchingValue = hand[0].getCardValue();
 		int highestValue = 0;
 		
+		//Check if Card Suit matches and Card Values are consecutive
 		for (int i = 0; i < hand.length; i++) {
 			
 			if (hand[i].getCardSuit() != matchingSuite || hand[i].getCardValue() != matchingValue + i)
@@ -172,6 +174,8 @@ class PokerGame {
 
 		int value;
 		
+		//Use HashMap, to add keys (Card Values), and increment
+		//the amount of repeating values
 		HashMap<Integer, Integer> hm = new HashMap<Integer, Integer>();
 		for (int i = 0; i < hand.length; i++) {
 			int key = hand[i].getCardValue();
@@ -183,10 +187,13 @@ class PokerGame {
 			}
 		}
 		
+		//Pull the highest value in the HashMap
 		int numOfMatches = Collections.max(hm.values());
 				
 		int finalValue = 0;
 		
+		//If 4 matches, then we have a Four of a Kind
+		//Retrieve the key (Card Value)
 		if (numOfMatches == 4) {
 			for (Map.Entry<Integer,Integer> entry : hm.entrySet()) {
 				if (entry.getValue()==numOfMatches) {
@@ -202,6 +209,8 @@ class PokerGame {
 		
 		int value = 0;
 		
+		//Use HashMap, to add keys (Card Values), and increment
+		//the amount of repeating values
 		HashMap<Integer, Integer> hm = new HashMap<Integer, Integer>();
 		for (int i = 0; i < hand.length; i++) {
 			int key = hand[i].getCardValue();
@@ -213,12 +222,16 @@ class PokerGame {
 			}
 		}
 		
+		//Pull the highest value in the HashMap
 		int numOfMatches = Collections.max(hm.values());
 				
 		int finalValue = 0;
 		
 		int result = 0;
 		
+		//If 3 matches, then we have beginning of Full House
+		//Retrieve the key (Card Value)
+		//Check if remaining hand contains pair
 		if (numOfMatches == 3) {
 			for (Map.Entry<Integer,Integer> entry : hm.entrySet()) {
 				if (entry.getValue()==numOfMatches) {
@@ -244,6 +257,8 @@ class PokerGame {
 		
 		Suit matchingSuite = hand[0].getCardSuit();
 		
+		//Iterate hand, if all 5 cards have same suit
+		//return 1, otherwise return 0
 		for (int i = 0; i < hand.length; i++) {
 			
 			if (hand[i].getCardSuit() != matchingSuite)
@@ -258,6 +273,8 @@ class PokerGame {
 		int matchingValue = hand[0].getCardValue();
 		int highestValue = 0;
 		
+		//Iterate through hand, if there are 5 cards with consecutive values
+		//retrieve highest card value and return
 		for (int i = 0; i < hand.length; i++) {
 			
 			if (hand[i].getCardValue() != matchingValue + i)
@@ -273,6 +290,8 @@ class PokerGame {
 		
 		int value;
 		
+		//Use HashMap, to add keys (Card Values), and increment
+		//the amount of repeating values
 		HashMap<Integer, Integer> hm = new HashMap<Integer, Integer>();
 		for (int i = 0; i < hand.length; i++) {
 			int key = hand[i].getCardValue();
@@ -284,10 +303,13 @@ class PokerGame {
 			}
 		}
 		
+		//Pull the highest value in the HashMap
 		int numOfMatches = Collections.max(hm.values());
 		
 		int finalValue = 0;
 		
+		//If 3 matches, then we have a Three of a Kind
+		//Retrieve the key (Card Value) and return it
 		if (numOfMatches == 3) {
 			for (Map.Entry<Integer,Integer> entry : hm.entrySet()) {
 				if (entry.getValue()==numOfMatches) {
@@ -312,6 +334,7 @@ class PokerGame {
 			
 			for (int j = i + 1; j < hand.length; j++) {
 				
+				//If two pairs are found, increment and break
 				if(hand[i].getCardValue() == hand[j].getCardValue() && i != j) {
 					numOfPairs++;
 					highestValue = (highestValue > hand[i].getCardValue()) ? 
@@ -339,6 +362,7 @@ class PokerGame {
 			
 			for (int j = i + 1; j < hand.length; j++) {
 				
+				//If Pair is found, increment and break
 				if(hand[i].getCardValue() == hand[j].getCardValue() && i != j) {
 					numOfPairs++;
 					highestValue = hand[i].getCardValue();
@@ -365,13 +389,16 @@ class PokerGame {
 	
 	public Card[] getCardValues(String [] input) {
 		
+		//There should only be 6 elements for each player's input
 		if(input.length > 6) {
 			System.out.println("Error: Input format invalid");
 			return null;
 		}
 		
+		//Create hand for player
 		Card[] array = new Card[5];
 		
+		//Initialize each card
 		for (int i = 0; i < array.length; i++) {
 			array[i] = new Card();
 		}
@@ -379,9 +406,11 @@ class PokerGame {
 		for (int i = 1; i <= input.length-1; i++) {
 			String temp = input[i];
 			
+			//Regex for parsing cardValue and cardSuit
 			String cardVal = temp.replaceAll("\\D+", "");
 			String suitValue = temp.replaceAll("[^A-Z]", "");
 			
+			//If one these conditions are met, card formatting is wrong
 			if ((!cardVal.isEmpty()) && suitValue.length() > 1) {
 				System.out.println("Error: Card format incorrect");
 				return null;
@@ -395,6 +424,7 @@ class PokerGame {
 				return null;
 			}
 
+			//Add card value and suit to player hand
 			if (!array[i-1].setCardValue((cardVal.isEmpty()) ? 
 				String.valueOf(temp.charAt(0)) : cardVal) ) {
 					System.out.println("Error: Card format incorrect");
@@ -419,6 +449,7 @@ class PokerGame {
 			while (in.hasNext()) {
 				String gameInput = in.nextLine();
 				
+				//If input doesn't start with 'Black:', exit the program
 				if (!gameInput.startsWith("Black")) {
 					System.out.println("Error: First Player input needs to start with 'Black:'");
 					break;
@@ -428,12 +459,13 @@ class PokerGame {
 				
 				String[] playerWhite = gameInput.substring(gameInput.length()/2).trim().split(" ");
 				
+				//If input doesn't start with 'White:', exit the program
 				if (!playerWhite[0].startsWith("White")) {
 					System.out.println("Error: Second player input needs to start with 'White:'");
 					break;
 				}
 				
-				PokerGame game = new PokerGame(2, true);
+				PokerGame game = new PokerGame(2);
 				game.playerList[0].setPlayerName("Black");
 				game.playerList[1].setPlayerName("White");
 				
@@ -443,7 +475,7 @@ class PokerGame {
 				if (game.playerList[0].playerHand == null || game.playerList[1].playerHand == null)
 					break;
 				
-				
+				//Winning player is returned, null if it's a tie
 				Player winningPlayer = game.determineBestHand(game.playerList);
 				
 				if (winningPlayer != null) {
@@ -482,7 +514,12 @@ class Card {
 		cardValue = 0;
 	}
 	
-	//MEMBER FUNCTIONS
+	//GET FUNCTIONS
+	public Suit getCardSuit() { return cardSuit; }
+	
+	public int getCardValue() { return cardValue; }
+	
+	//SET FUNCTIONS
 	public void setCardSuit(Suit s) { cardSuit = s; }
 	
 	public boolean setCardSuit(String s) {
@@ -497,8 +534,6 @@ class Card {
 		
 		return true;
 	}
-	
-	public Suit getCardSuit() { return cardSuit; }
 	
 	public void setCardValue(int val) { cardValue = val; }
 	
@@ -525,8 +560,7 @@ class Card {
 		
 	}
 	
-	public int getCardValue() { return cardValue; }
-	
+	//MEMBER FUNCTIONS
 	public void displayCard() {
 		
 		if (cardValue >= 2 && cardValue <= 10) {
@@ -553,6 +587,7 @@ class Card {
 
 class Player {
 	
+	//MEMBER VARIABLES
 	protected Card[] playerHand;
 	private int handValue;
 	private int highestCardValue;
@@ -567,7 +602,7 @@ class Player {
 		playerName = "";
 	}
 	
-	//Set functions
+	//SET FUNCTIONS
 	public void setPlayerName(int index) { playerName = "Player " + index; }
 	
 	public void setPlayerName(String name) { playerName = name; }
@@ -578,7 +613,7 @@ class Player {
 	
 	public void setFullHousePair(int value) { fullHousePair = value; }
 	
-	//Get functions
+	//GET FUNCTIONS
 	public String getPlayerName() { return playerName; }
 	
 	public int getHandValue() { return handValue; }
@@ -587,7 +622,7 @@ class Player {
 	
 	public int getFullHousePair() { return fullHousePair; }
 	
-	//Member functions
+	//MEMBER FUNCTIONS
 	public String displayHandValue() {
 		
 		String str = "";
