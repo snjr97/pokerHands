@@ -1,5 +1,17 @@
 # Poker Hands
 
+## Instructions to execute
+
+You can either execute the program with "java -jar PokerHands.jar < inputfile.in" or "java PokerGame < inputfile.in"
+
+## Quick Description of test cases
+
+- test1.in: Contains results for a Straight Flush, Four of a Kind, Flush, and Straight
+- test2.in: Contains the example test case from the exercise link
+- test3.in: Contains results for Three of a Kind, Flush, Flush, and Straight
+- test4.in: Contains results for Two Pair, Pair, High Card
+- test5.in: Various inputs that contain errors within it
+
 ## Problem Description
 
 Your job is to compare several pairs of poker hands and to indicate which, if either, has a higher rank.
